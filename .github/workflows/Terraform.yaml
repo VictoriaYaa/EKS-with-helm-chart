@@ -19,7 +19,7 @@ jobs:
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
@@ -48,15 +48,11 @@ jobs:
     # - name: Validate failed
     #   if: ${{ failure() && steps.validate.outputs.failure-reason == 'validate-failed' }}
     #   run: echo "terraform validate failed"
-
-    # Install kubectl
-    - name: Install Kubectl
-      uses: kodermax/kubectl-aws-eks@main
     
-    # - name: Test kubectl
-    #   uses: ianbelcher/eks-kubectl-action@master
-    #   with:
-    #     cluster_name: ${{ secrets.CLUSTER_NAME }}
+    - name: Test kubectl
+      uses: ianbelcher/eks-kubectl-action@master
+      with:
+        cluster_name: eks-vic
         
     - name: Update Kube Config
       run: aws eks update-kubeconfig --name eks-vic --region us-east-1
