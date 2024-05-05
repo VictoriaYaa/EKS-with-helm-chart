@@ -27,27 +27,32 @@ jobs:
 
 
     # Check AWS credentials 
+    - name: get caller identity
+      id: token
+      run: |
+        aws sts get-caller-identity
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
         aws-region: us-east-1
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-session-token: ${{ steps.token.outputs.aws-session-token }}
+  
 
-
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      id: init
-      run: terraform init
+    # # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    # - name: Terraform Init
+    #   id: init
+    #   run: terraform init
 
     
-    # Validate the configuration files
-    - name: Terraform Validate
-      run: terraform validate
+    # # Validate the configuration files
+    # - name: Terraform Validate
+    #   run: terraform validate
 
-    - name: Validate failed
-      if: ${{ failure() && steps.validate.outputs.failure-reason == 'validate-failed' }}
-      run: echo "terraform validate failed"
+    # - name: Validate failed
+    #   if: ${{ failure() && steps.validate.outputs.failure-reason == 'validate-failed' }}
+    #   run: echo "terraform validate failed"
 
     # Install kubectl
     - name: Install Kubectl
