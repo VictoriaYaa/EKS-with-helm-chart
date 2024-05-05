@@ -66,8 +66,7 @@ jobs:
       run: |
         echo "kubectl config view"
         kubectl config view
-        echo "kubectl get svc"
-        kubectl get svc
+        aws eks get-token
 
  # echo "kubectl get all"
         # kubectl get all
@@ -78,6 +77,8 @@ jobs:
         # echo "kubectl get pods -o wide"
         # kubectl get pods -o wide
 
+        # echo "kubectl get svc"
+        # kubectl get svc
     # # Generates an execution plan for Terraform
     # - name: Terraform Plan
     #   id: plan
