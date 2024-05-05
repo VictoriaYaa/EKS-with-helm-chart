@@ -1,0 +1,17 @@
+replicaCount: 1
+service:
+    type: NodePort
+fullnameOverride: "httpbin"
+ingress:
+  enabled: true
+  className: "alb"
+  hosts:
+    - host: "${host}"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  annotations:
+        kubernetes.io/ingress.class: alb
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        service.beta.kubernetes.io/aws-load-balancer-type: alb
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
