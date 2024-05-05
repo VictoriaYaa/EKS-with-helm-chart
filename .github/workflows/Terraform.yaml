@@ -67,7 +67,9 @@ jobs:
 
     - name: Check the Kubectl Output
       run: |
-        aws eks get-token --cluster-name eks-vic
+        echo "kubectl get svc"
+        kubectl get svc
+    #     aws eks get-token --cluster-name eks-vic
 
  # echo "kubectl get all"
         # kubectl get all
