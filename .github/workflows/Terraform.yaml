@@ -53,12 +53,12 @@ jobs:
     - name: Install Kubectl
       uses: kodermax/kubectl-aws-eks@main
       env:
-        KUBE_CONFIG: "~/.kube/config"
+        KUBE_CONFIG: "/home/runner/.kube/config"
         
     - name: Update Kube Config
       run: |
         aws eks update-kubeconfig --name eks-vic --region us-east-1
-        export KUBECONFIG="~/.kube/config"
+        export KUBECONFIG="/home/runner/.kube/config"
         kubectl get pods
 
     - name: Check the Kubectl Output
