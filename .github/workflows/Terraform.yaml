@@ -52,6 +52,11 @@ jobs:
       if: ${{ failure() && steps.validate.outputs.failure-reason == 'validate-failed' }}
       run: echo "terraform validate failed"
     
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan 
+    
     - name: Setup kubeconfig
       id: setup-kubeconfig
       run: |
@@ -80,7 +85,3 @@ jobs:
 
         # echo "kubectl get svc"
         # kubectl get svc
-    # # Generates an execution plan for Terraform
-    # - name: Terraform Plan
-    #   id: plan
-    #   run: terraform plan 
