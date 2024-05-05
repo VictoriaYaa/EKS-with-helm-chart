@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   terraform:
-    name: 'Process for Branches'
+    name: 'Terraform CI'
     runs-on: ubuntu-latest
     
 
