@@ -50,12 +50,11 @@ resource "aws_iam_user" "terraform" {
   name = "terraform"
 }
 
-data "aws_iam_policy" "admin_terraform" {
-  name = "AdministratorAccess"
+data "aws_iam_policy" "admin_terraform_policy" {
+  arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
-resource "aws_iam_user_policy" "AdministratorAccess" {
-  name   = "AdministratorAccess"
-  user   = aws_iam_user.terraform.name
-  policy = data.aws_iam_policy.admin_terraform.policy
+resource "aws_iam_user_policy_attachment" "attach_to_tf" {
+  user       = aws_iam_user.terraform.name
+  policy_arn = data.aws_iam_policy.admin_terraform_policy.arn
 }
