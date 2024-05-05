@@ -57,7 +57,7 @@ jobs:
       id: install
         
     - name: Update Kube Config
-      run: aws eks update-kubeconfig --name NEW-vic-eks --region us-east-1
+      run: aws eks update-kubeconfig --name eks-vic --region us-east-1
 
     - name: Check the Kubectl Output
       run: |
