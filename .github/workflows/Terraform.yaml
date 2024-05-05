@@ -29,6 +29,10 @@ jobs:
     # Check AWS credentials 
     - name: get caller identity
       id: token
+      with:
+        aws-region: us-east-1
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
       run: |
         aws sts get-caller-identity
     - name: Configure AWS Credentials
