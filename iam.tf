@@ -54,8 +54,8 @@ data "aws_iam_policy" "admin_terraform" {
   name = "AdministratorAccess"
 }
 
-resource "aws_iam_user_policy" "terraform_ro" {
-  name   = "terraform-ro"
+resource "aws_iam_user_policy" "AdministratorAccess" {
+  name   = "AdministratorAccess"
   user   = aws_iam_user.terraform.name
   policy = data.aws_iam_policy.admin_terraform.policy
 }
