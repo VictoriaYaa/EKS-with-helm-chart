@@ -51,7 +51,9 @@ jobs:
 
     # Install kubectl
     - name: Install Kubectl
-      uses: helm/kind-action@v1.4.0
+      uses: kodermax/kubectl-aws-eks@main
+      env:
+        KUBE_CONFIG: "~/.kube/config"
         
     - name: Update Kube Config
       run: aws eks update-kubeconfig --name eks-vic --region us-east-1
