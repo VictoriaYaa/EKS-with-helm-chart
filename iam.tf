@@ -60,6 +60,11 @@ data "aws_iam_policy_document" "terraform_ro" {
     actions   = ["*"]
     resources = ["*"]
   }
+  statement {
+    effect    = "Allow"
+    actions   = ["kms:DescribeKey"]
+    resources = ["arn:aws:kms:us-east-1:533267153411:key/1270628f-f6cb-4dcc-9000-f300bc97b9e8"]
+  }
 }
 
 resource "aws_iam_user_policy" "terraform_ro" {
