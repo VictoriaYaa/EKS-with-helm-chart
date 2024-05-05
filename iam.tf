@@ -54,6 +54,32 @@ data "aws_iam_policy" "admin_terraform_policy" {
   arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
+resource "aws_iam_role" "role_for_tf" {
+  name = "role_for_tf"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRoleWithWebIdentity"
+        "Condition": {
+                "StringEquals": {
+                    "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+                },
+                "StringLike": {
+                    "token.actions.githubusercontent.com:sub": "repo:VictoriaYaa/EKS-with-helm-chart.git:*"
+                }
+            }
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Federated = "${var.cluster_identity_oidc_issuer_arn}"
+        }
+      },
+    ]
+  })
+}
+
 resource "aws_iam_user_policy_attachment" "attach_to_tf" {
   user       = aws_iam_user.terraform.name
   policy_arn = data.aws_iam_policy.admin_terraform_policy.arn
