@@ -38,19 +38,19 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
     
 
-    # # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    # - name: Terraform Init
-    #   id: init
-    #   run: terraform init
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      id: init
+      run: terraform init
 
     
-    # # Validate the configuration files
-    # - name: Terraform Validate
-    #   run: terraform validate
+    # Validate the configuration files
+    - name: Terraform Validate
+      run: terraform validate
 
-    # - name: Validate failed
-    #   if: ${{ failure() && steps.validate.outputs.failure-reason == 'validate-failed' }}
-    #   run: echo "terraform validate failed"
+    - name: Validate failed
+      if: ${{ failure() && steps.validate.outputs.failure-reason == 'validate-failed' }}
+      run: echo "terraform validate failed"
     
     - name: Setup kubeconfig
       id: setup-kubeconfig
@@ -60,7 +60,7 @@ jobs:
 
     - name: Deploy to EKS
       run: |
-        kubectl get services -o wide
+        kubectl get svc
 
     # - name: Update Kube Config
     #   run: |
