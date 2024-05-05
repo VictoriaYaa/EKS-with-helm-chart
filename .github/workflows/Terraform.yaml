@@ -1,0 +1,79 @@
+name: 'terraform'
+
+on:
+  push:
+    branches:
+    - adding-github
+    - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    name: 'Process for Branches'
+    runs-on: ubuntu-latest
+    
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+
+    # Check AWS credentials 
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        aws-region: us-east-1
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      id: init
+      run: terraform init
+
+    
+    # Validate the configuration files
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Validate failed
+      if: ${{ failure() && steps.validate.outputs.failure-reason == 'validate-failed' }}
+      run: echo "terraform validate failed"
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan 
+
+    # Install kubectl
+    - name: Install Kubectl
+      uses: azure/setup-kubectl@v1
+      with:
+        version: 'v1.21.3'
+      id: install
+        
+    - name: Update Kube Config
+      run: aws eks update-kubeconfig --name NEW-vic-eks --region us-east-1
+
+    - name: Check the Kubectl Output
+      run: |
+        echo "kubectl get all"
+        kubectl get all
+
+        echo "kubectl get nodes -o wide"
+        kubectl get nodes -o wide
+
+        echo "kubectl get pods -o wide"
+        kubectl get pods -o wide
+
+        echo "kubectl get svc"
+        kubectl get svc
