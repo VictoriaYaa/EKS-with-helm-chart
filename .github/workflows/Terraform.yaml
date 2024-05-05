@@ -19,7 +19,7 @@ jobs:
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
@@ -27,22 +27,13 @@ jobs:
 
 
     # Check AWS credentials 
-    - name: get caller identity
-      id: token
-      with:
-        aws-region: us-east-1
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-      run: |
-        aws sts get-caller-identity
     - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v3
+      uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-region: us-east-1
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-        aws-session-token: ${{ steps.token.outputs.aws-session-token }}
-  
+    
 
     # # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     # - name: Terraform Init
@@ -61,18 +52,24 @@ jobs:
     # Install kubectl
     - name: Install Kubectl
       uses: kodermax/kubectl-aws-eks@main
-      env:
-        KUBE_CONFIG: "/home/runner/.kube/config"
+    
+    # - name: Test kubectl
+    #   uses: ianbelcher/eks-kubectl-action@master
+    #   with:
+    #     cluster_name: ${{ secrets.CLUSTER_NAME }}
         
     - name: Update Kube Config
-      run: |
-        aws eks update-kubeconfig --name eks-vic --region us-east-1
-        export KUBECONFIG="~/.kube/config"
+      run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
 
-    - name: Check the Kubectl Output
+    - name: Deploy to EKS
       run: |
-        echo "kubectl get svc"
         kubectl get svc
+
+    # - name: Update Kube Config
+    #   run: |
+    #     aws eks update-kubeconfig --name eks-vic --region us-east-1
+    #     export KUBECONFIG="~/.kube/config"
+
     #     aws eks get-token --cluster-name eks-vic
 
  # echo "kubectl get all"
