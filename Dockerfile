@@ -5,7 +5,8 @@ WORKDIR /go/src/github.com/mccutchen/go-httpbin
 
 COPY . .
 
-RUN --mount=type=cache,id=gobuild,target=/root/.cache/go-build make build buildtests
+RUN --mount=type=cache,id=gobuild,target=/root/.cache/go-build \
+    make build buildtests
 
 FROM gcr.io/distroless/base
 
