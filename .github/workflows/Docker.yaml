@@ -73,5 +73,5 @@ jobs:
 
     - name: Check Helm In EKS
       run: |
-        kubectl get svc vic-ns
+        kubectl get svc -n vic-ns
         helm list -n vic-ns
