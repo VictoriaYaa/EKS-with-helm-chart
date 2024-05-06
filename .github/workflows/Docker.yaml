@@ -46,9 +46,8 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: httpbin
         IMAGE_TAG: latest
-        url: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
       run: |
-        docker build -t $url .
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         echo "Pushing image to ECR..."
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
@@ -61,7 +60,6 @@ jobs:
         ECR_REPOSITORY: httpbin
         HELM_NAME: httpbin
         IMAGE_TAG: latest
-        url: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
       run: |
         helm upgrade $HELM_NAME httpbingo --set image.repository=$ECR_REGISTRY/$ECR_REPOSITORY,image.tag=$IMAGE_TAG
       
