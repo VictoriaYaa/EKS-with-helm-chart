@@ -57,10 +57,11 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.docker-push.outputs.registry }}
         ECR_REPOSITORY: httpbin
-        HELM_NAME: estahn/httpbingo
+        HELM_NAME: httpbin
+        HELM_CHART_NAME: estahn/httpbingo
         IMAGE_TAG: latest
       run: |
-        helm upgrade $HELM_NAME --set image.repository=$ECR_REGISTRY/$ECR_REPOSITORY,image.tag=$IMAGE_TAG --values httpbin-values.yaml -n vic-ns
+        helm upgrade $HELM_NAME $HELM_CHART_NAME --set image.repository=$ECR_REGISTRY/$ECR_REPOSITORY,image.tag=$IMAGE_TAG --values httpbin-values.yaml -n vic-ns
       
 
     - name: Deploy to EKS
