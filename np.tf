@@ -33,10 +33,19 @@ resource "kubernetes_network_policy" "network_policy" {
 
       from {
         ip_block {
-          cidr = "0.0.0.0/8"
+          cidr = "10.0.0.0/8"
           except = [
             "10.0.0.0/24",
             "10.0.1.0/24",
+          ]
+        }
+      }
+      from {
+        ip_block {
+          cidr = "94.0.0.0/8"
+          except = [
+            "94.10.0.0/24",
+            "94.0.10.0/24",
           ]
         }
       }
