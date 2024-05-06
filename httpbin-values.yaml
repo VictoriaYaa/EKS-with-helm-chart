@@ -15,3 +15,8 @@ ingress:
         alb.ingress.kubernetes.io/scheme: internet-facing
         service.beta.kubernetes.io/aws-load-balancer-type: alb
         alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+image:
+  repository: 533267153411.dkr.ecr.us-east-1.amazonaws.com/httpbin
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"

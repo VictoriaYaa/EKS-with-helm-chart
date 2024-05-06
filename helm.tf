@@ -13,10 +13,6 @@ resource "helm_release" "httpbin" {
   values = [
     templatefile("${path.module}/httpbin-values.yaml",{ host = "${data.kubernetes_ingress_v1.ingress_hostname.status.0.load_balancer.0.ingress.0.hostname}" })
   ]
-
-#   values = [
-#     file("${path.module}/httpbin-values.yaml")
-#   ]
 }
 
 data "kubernetes_ingress_v1" "ingress_hostname" {
