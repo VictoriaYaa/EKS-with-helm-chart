@@ -3,7 +3,6 @@ name: 'terraform'
 on:
   push:
     branches:
-    - adding-github
     - main
 
 permissions:
