@@ -54,8 +54,6 @@ jobs:
     - name: Update Kubeconfig
       run: |
         aws eks --region $AWS_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
-        kubectl get svc -n vic-ns
-        helm list -n vic-ns
 
 
     - name: Update Helm With My New Image
