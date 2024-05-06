@@ -1,0 +1,43 @@
+name: 'docker'
+
+on:
+  push:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  docker:
+    name: 'Docker CI/CD'
+    runs-on: ubuntu-latest
+    
+    env:
+      AWS_REGION: us-east-1
+      EKS_CLUSTER_NAME: eks-vic
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v1
+
+
+    # Check AWS credentials 
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-region: ${{ env.AWS_REGION }}
+        # role-to-assume: arn:aws:iam::533267153411:role/role_for_tf
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+    
+    
+    - name: Setup kubeconfig
+      id: setup-kubeconfig
+      run: |
+        aws eks --region $AWS_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
+      
+
+    - name: Deploy to EKS
+      run: |
+        kubectl get svc

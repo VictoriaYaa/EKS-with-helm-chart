@@ -34,9 +34,9 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-region: ${{ env.AWS_REGION }}
-        role-to-assume: arn:aws:iam::533267153411:role/role_for_tf
-        # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-        # aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        # role-to-assume: arn:aws:iam::533267153411:role/role_for_tf
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
     
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
@@ -57,6 +57,7 @@ jobs:
     - name: Terraform Plan
       id: plan
       run: terraform plan 
+    
     
     - name: Setup kubeconfig
       id: setup-kubeconfig
