@@ -19,4 +19,4 @@ image:
   repository: 533267153411.dkr.ecr.us-east-1.amazonaws.com/httpbin
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "latest"
