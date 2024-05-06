@@ -41,23 +41,33 @@ jobs:
     
     # Docker Build, Tag and Push
     - name: Build, tag, and push image to Amazon ECR
+      id: docker-push
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: httpbin
         IMAGE_TAG: latest
+        url: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker build -t $url .
         echo "Pushing image to ECR..."
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
 
-    - name: Setup kubeconfig
-      id: setup-kubeconfig
+    - name: Update Helm With My New Image
+      id: helm-upgrade
+      env:
+        ECR_REGISTRY: ${{ steps.docker-push.outputs.registry }}
+        ECR_REPOSITORY: httpbin
+        HELM_NAME: httpbin
+        IMAGE_TAG: latest
+        url: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
       run: |
-        aws eks --region $AWS_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
+        helm upgrade $HELM_NAME httpbingo --set image.repository=$ECR_REGISTRY/$ECR_REPOSITORY,image.tag=$IMAGE_TAG
       
 
     - name: Deploy to EKS
       run: |
-        kubectl get svc
+        aws eks --region $AWS_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
+        kubectl get svc vic-ns
+        helm list -n vic-ns
