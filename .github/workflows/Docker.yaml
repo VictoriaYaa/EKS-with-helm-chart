@@ -58,7 +58,7 @@ jobs:
         ECR_REGISTRY: ${{ steps.docker-push.outputs.registry }}
         ECR_REPOSITORY: httpbin
         HELM_NAME: httpbin
-        HELM_CHART_NAME: httpbingo-0.1.1
+        HELM_CHART_NAME: https://estahn.github.io/charts
         IMAGE_TAG: latest
       run: |
         helm upgrade $HELM_NAME $HELM_CHART_NAME --set image.repository=$ECR_REGISTRY/$ECR_REPOSITORY,image.tag=$IMAGE_TAG --values httpbin-values.yaml -n vic-ns
