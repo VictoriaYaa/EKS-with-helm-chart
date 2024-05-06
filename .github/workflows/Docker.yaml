@@ -68,7 +68,8 @@ jobs:
         HELM_CHART_NAME: httpbingo/
         IMAGE_TAG: latest
       run: |
-        helm upgrade $HELM_NAME $HELM_CHART_NAME --set image.repository=$ECR_REGISTRY/$ECR_REPOSITORY,image.tag=$IMAGE_TAG --values httpbin-values.yaml -n vic-ns
+        echo "the URI: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+        helm upgrade $HELM_NAME $HELM_CHART_NAME --set ingress.hosts[0].host="k8s-vicns-httpbin-e1483db053-318127809.us-east-1.elb.amazonaws.com",image.tag=$IMAGE_TAG --values httpbin-values.yaml -n vic-ns
       
 
     - name: Check Helm In EKS
