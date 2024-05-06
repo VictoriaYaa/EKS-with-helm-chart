@@ -52,6 +52,13 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
 
+    - name: Update Kubeconfig
+      run: |
+        aws eks --region $AWS_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
+        kubectl get svc vic-ns
+        helm list -n vic-ns
+
+
     - name: Update Helm With My New Image
       id: helm-upgrade
       env:
@@ -64,8 +71,7 @@ jobs:
         helm upgrade $HELM_NAME $HELM_CHART_NAME --set image.repository=$ECR_REGISTRY/$ECR_REPOSITORY,image.tag=$IMAGE_TAG --values httpbin-values.yaml -n vic-ns
       
 
-    - name: Deploy to EKS
+    - name: Check Helm In EKS
       run: |
-        aws eks --region $AWS_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
         kubectl get svc vic-ns
         helm list -n vic-ns
