@@ -43,19 +43,3 @@ resource "aws_iam_role_policy_attachment" "kubernetes_alb_controller" {
   role       = aws_iam_role.kubernetes_alb_controller[0].name
   policy_arn = aws_iam_policy.kubernetes_alb_controller[0].arn
 }
-
-
-# IAM for tf user
-resource "aws_iam_user" "terraform" {
-  name = "terraform"
-}
-
-data "aws_iam_policy" "admin_terraform_policy" {
-  arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
-
-
-resource "aws_iam_user_policy_attachment" "attach_to_tf" {
-  user       = aws_iam_user.terraform.name
-  policy_arn = data.aws_iam_policy.admin_terraform_policy.arn
-}
